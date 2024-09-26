@@ -3,13 +3,13 @@ import { makeMutations } from "../../src/react-query/mutations";
 import { compile } from "../test.utils";
 
 const expected = `type MutationConfigs = {
-    useCreatePet?: (queryClient: QueryClient) => Pick<UseMutationOptions<Response<"createPet">, unknown, Parameters<Requests["createPet"]>[0], unknown>, "onSuccess" | "onSettled" | "onError">;
-    useAddPetPhoto?: (queryClient: QueryClient) => Pick<UseMutationOptions<Response<"addPetPhoto">, unknown, Parameters<Requests["addPetPhoto"]>[0], unknown>, "onSuccess" | "onSettled" | "onError">;
+    useCreatePet?: (queryClient: QueryClient) => Pick<MutationObserverOptions<Response<"createPet">, unknown, Parameters<Requests["createPet"]>[0], unknown>, "onSuccess" | "onSettled" | "onError">;
+    useAddPetPhoto?: (queryClient: QueryClient) => Pick<MutationObserverOptions<Response<"addPetPhoto">, unknown, Parameters<Requests["addPetPhoto"]>[0], unknown>, "onSuccess" | "onSettled" | "onError">;
 };
 function makeMutations(requests: Requests, config?: Config["mutations"]) {
     return {
-        useCreatePet: (options?: Omit<UseMutationOptions<Response<"createPet">, unknown, Parameters<Requests["createPet"]>[0], unknown>, "mutationFn">) => useRapiniMutation<Response<"createPet">, unknown, Parameters<Requests["createPet"]>[0]>(payload => requests.createPet(payload), config?.useCreatePet, options),
-        useAddPetPhoto: (petId: string, options?: Omit<UseMutationOptions<Response<"addPetPhoto">, unknown, Parameters<Requests["addPetPhoto"]>[0], unknown>, "mutationFn">) => useRapiniMutation<Response<"addPetPhoto">, unknown, Parameters<Requests["addPetPhoto"]>[0]>(payload => requests.addPetPhoto(payload, petId), config?.useAddPetPhoto, options)
+        useCreatePet: (options?: Omit<MutationObserverOptions<Response<"createPet">, unknown, Parameters<Requests["createPet"]>[0], unknown>, "mutationFn">) => useRapiniMutation<Response<"createPet">, unknown, Parameters<Requests["createPet"]>[0]>(payload => requests.createPet(payload), config?.useCreatePet, options),
+        useAddPetPhoto: (petId: string, options?: Omit<MutationObserverOptions<Response<"addPetPhoto">, unknown, Parameters<Requests["addPetPhoto"]>[0], unknown>, "mutationFn">) => useRapiniMutation<Response<"addPetPhoto">, unknown, Parameters<Requests["addPetPhoto"]>[0]>(payload => requests.addPetPhoto(payload, petId), config?.useAddPetPhoto, options)
     } as const;
 }
 `;

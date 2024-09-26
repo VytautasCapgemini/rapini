@@ -1,12 +1,12 @@
 import ts from "typescript";
 
-export const RAPINI_MUTATION_ID = "useRapiniMutation";
+export const RAPINI_PREFETCH_ID = "useRapiniPrefetch";
 
-export function makeRapiniMutation() {
+export function makeRapiniPrefetches() {
   return ts.factory.createFunctionDeclaration(
     undefined,
     undefined,
-    ts.factory.createIdentifier(RAPINI_MUTATION_ID),
+    ts.factory.createIdentifier(RAPINI_PREFETCH_ID),
     [
       ts.factory.createTypeParameterDeclaration(
         undefined,

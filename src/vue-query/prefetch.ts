@@ -8,13 +8,15 @@ import {
 } from "../common/util";
 import { RAPINI_MUTATION_ID } from "./rapini-mutation";
 
-export function makeMutations(
+export function makePrefetches(
   $refs: SwaggerParser.$Refs,
   paths: OpenAPIV3.PathsObject
 ) {
-  const properties = Object.entries(paths).flatMap(([pattern, path]) =>
-    makeProperties($refs, pattern, path!)
-  );
+    const properties = Object.entries(paths)
+        .filter(([_, item]) => !!item?.get)
+        .map(([pattern, item]) =>
+            makeProperty($refs, pattern, item!.get, item!.parameters)
+        );
 
   const requestsParam = ts.factory.createParameterDeclaration(
     /*modifiers*/ undefined,
@@ -39,7 +41,7 @@ export function makeMutations(
         /*typeArgs*/ undefined
       ),
       /*indexType*/ ts.factory.createLiteralTypeNode(
-        ts.factory.createStringLiteral("mutations")
+        ts.factory.createStringLiteral("prefetches")
       )
     ),
     /*initializer*/ undefined
@@ -48,14 +50,14 @@ export function makeMutations(
   return [
     ts.factory.createTypeAliasDeclaration(
       /*modifiers*/ undefined,
-      /*name*/ ts.factory.createIdentifier("MutationConfigs"),
+      /*name*/ ts.factory.createIdentifier("PrefetchesConfigs"),
       /*typeParameters*/ undefined,
       /*type*/ ts.factory.createTypeLiteralNode(properties.map((p) => p.config))
     ),
     ts.factory.createFunctionDeclaration(
       /*modifiers*/ undefined,
       /*asteriskToken*/ undefined,
-      /*name*/ ts.factory.createIdentifier("makeMutations"),
+      /*name*/ ts.factory.createIdentifier("makePrefetches"),
       /*typeParameters*/ undefined,
       /*parameters*/ [requestsParam, configParam],
       /*type*/ undefined,
@@ -78,44 +80,6 @@ export function makeMutations(
       )
     ),
   ];
-}
-
-// Every path can have multiple mutations, like POST/PUT/PATCH/DELETE etc
-// And if there's a GET too then we should invalidate that cache
-function makeProperties(
-  $refs: SwaggerParser.$Refs,
-  pattern: string,
-  path: OpenAPIV3.PathItemObject
-) {
-  const properties: {
-    property: ts.PropertyAssignment;
-    config: ts.TypeElement;
-  }[] = [];
-  const pathParams = path.parameters;
-
-  if (path.post) {
-    properties.push(
-      makeProperty($refs, pattern, path.post, "post", pathParams)
-    );
-  }
-
-  if (path.put) {
-    properties.push(makeProperty($refs, pattern, path.put, "put", pathParams));
-  }
-
-  if (path.patch) {
-    properties.push(
-      makeProperty($refs, pattern, path.patch, "patch", pathParams)
-    );
-  }
-
-  if (path.delete) {
-    properties.push(
-      makeProperty($refs, pattern, path.delete, "delete", pathParams)
-    );
-  }
-
-  return properties;
 }
 
 function optionsParameterDeclaration(
@@ -179,15 +143,14 @@ function optionsParameterDeclaration(
 }
 
 function makeProperty(
-  $refs: SwaggerParser.$Refs,
-  pattern: string,
-  operation: OpenAPIV3.OperationObject,
-  method: string,
-  pathParams?: OpenAPIV3.PathItemObject["parameters"]
+    $refs: SwaggerParser.$Refs,
+    pattern: string,
+    operation: OpenAPIV3.PathItemObject["get"],
+    pathParams: OpenAPIV3.PathItemObject["parameters"]
 ): { property: ts.PropertyAssignment; config: ts.TypeElement } {
-  const operationId = operation.operationId;
+  const operationId = operation?.operationId;
   if (!operationId) {
-    throw `Missing "operationId" from "${method}" request with pattern ${pattern}`;
+    throw `Missing "operationId" from GET request with pattern ${pattern}`;
   }
   const normalizedOperationId = normalizeOperationId(operationId);
 

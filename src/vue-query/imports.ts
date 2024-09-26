@@ -53,7 +53,7 @@ function makeImportReactQueryDeclaration() {
       ts.factory.createImportSpecifier(
         /*typeOnly*/ true,
         /*propertyName*/ undefined,
-        /*name*/ ts.factory.createIdentifier("UseMutationOptions")
+        /*name*/ ts.factory.createIdentifier("MutationObserverOptions")
       ),
       ts.factory.createImportSpecifier(
         /*typeOnly*/ true,

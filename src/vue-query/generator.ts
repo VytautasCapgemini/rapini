@@ -13,6 +13,8 @@ import { makeTypes } from "../common/types";
 import { makeRapiniMutation } from "./rapini-mutation";
 import { makeConfigTypes } from "./config";
 import { CLIOptions } from "../cli";
+import {makeRapiniPrefetches} from "./rapini-prefetches";
+import {makePrefetches} from "./prefetch";
 
 function parse(
   $refs: SwaggerParser.$Refs,
@@ -37,6 +39,7 @@ function parseOpenApiV3Doc(
     requests: makeRequests($refs, doc.paths, options),
     queries: makeQueries($refs, doc.paths),
     mutations: makeMutations($refs, doc.paths),
+    prefetches: makePrefetches($refs, doc.paths),
     types: makeTypes($refs, doc),
   };
 }
@@ -49,10 +52,12 @@ function makeSourceFile(data: ReturnType<typeof parse>) {
       ...makeConfigTypes(),
       makeInitialize(),
       makeRapiniMutation(),
+      makeRapiniPrefetches(),
       ...data.queryKeys,
       ...data.requests,
       data.queries,
       ...data.mutations,
+      ...data.prefetches,
     ],
     /*endOfFileToken*/ ts.factory.createToken(ts.SyntaxKind.EndOfFileToken),
     /*flags*/ ts.NodeFlags.None
