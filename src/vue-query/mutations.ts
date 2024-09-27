@@ -131,7 +131,7 @@ function optionsParameterDeclaration(
       /*typeName*/ ts.factory.createIdentifier("Omit"),
       /*typeArguments*/ [
         ts.factory.createTypeReferenceNode(
-          /*typeName*/ ts.factory.createIdentifier("UseMutationOptions"),
+          /*typeName*/ ts.factory.createIdentifier("MutationObserverOptions"),
           /*typeArguments*/ [
             ts.factory.createTypeReferenceNode(
               /*typeName*/ ts.factory.createIdentifier("Response"),
@@ -318,7 +318,7 @@ function makeProperty(
           ts.factory.createIdentifier("Pick"),
           [
             ts.factory.createTypeReferenceNode(
-              ts.factory.createIdentifier("UseMutationOptions"),
+              ts.factory.createIdentifier("MutationObserverOptions"),
               [
                 ts.factory.createTypeReferenceNode(
                   ts.factory.createIdentifier("Response"),

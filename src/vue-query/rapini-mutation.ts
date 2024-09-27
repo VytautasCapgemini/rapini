@@ -78,7 +78,7 @@ export function makeRapiniMutation() {
             ts.factory.createIdentifier("Pick"),
             [
               ts.factory.createTypeReferenceNode(
-                ts.factory.createIdentifier("UseMutationOptions"),
+                ts.factory.createIdentifier("MutationObserverOptions"),
                 [
                   ts.factory.createTypeReferenceNode(
                     ts.factory.createIdentifier("TData"),
@@ -123,7 +123,7 @@ export function makeRapiniMutation() {
           ts.factory.createIdentifier("Omit"),
           [
             ts.factory.createTypeReferenceNode(
-              ts.factory.createIdentifier("UseMutationOptions"),
+              ts.factory.createIdentifier("MutationObserverOptions"),
               [
                 ts.factory.createTypeReferenceNode(
                   ts.factory.createIdentifier("TData"),
@@ -299,7 +299,7 @@ export function makeRapiniMutation() {
                             undefined,
                             undefined,
                             ts.factory.createIdentifier("context"),
-                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            undefined,//ts.factory.createToken(ts.SyntaxKind.QuestionToken),
                             ts.factory.createTypeReferenceNode(
                               ts.factory.createIdentifier("TContext"),
                               undefined
